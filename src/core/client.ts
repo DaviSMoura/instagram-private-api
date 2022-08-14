@@ -38,6 +38,7 @@ import { RestrictActionRepository } from '../repositories/restrict-action.reposi
 import { AddressBookRepository } from '../repositories/address-book.repository';
 import { StatusRepository } from '../repositories/status.repository';
 import { IgtvRepository } from '../repositories/igtv.repository';
+import { ClipsRepository } from '../repositories/clips.repository';
 
 export class IgApiClient {
   public state = new State();
@@ -82,6 +83,7 @@ export class IgApiClient {
   public simulate = new SimulateService(this);
   public story = new StoryService(this);
   public insights = new InsightsService(this);
+  public clips=new ClipsRepository(this);
 
   public destroy() {
     this.request.error$.complete();

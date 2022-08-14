@@ -12,3 +12,5 @@ Untitled*
 .env
 dist
 tools/state.json
+bot-agent.js
+cookies

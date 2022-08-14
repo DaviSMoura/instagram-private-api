@@ -91,6 +91,12 @@ export class Request {
       'ig-set-authorization': auth,
       'ig-set-password-encryption-key-id': pwKeyId,
       'ig-set-password-encryption-pub-key': pwPubKey,
+      'ig-set-ig-u-ds-user-id': UserID,
+      'ig-set-x-mid': xMid,
+      'ig-set-ig-u-rur': Rur,
+      'ig-set-ig-u-shbts': shbts,
+
+      'ig-set-ig-u-ig-direct-region-hint': Region,
     } = response.headers;
     if (typeof wwwClaim === 'string') {
       this.client.state.igWWWClaim = wwwClaim;
@@ -103,6 +109,22 @@ export class Request {
     }
     if (typeof pwPubKey === 'string') {
       this.client.state.passwordEncryptionPubKey = pwPubKey;
+    }
+    //@ts-ignore
+    if (typeof UserID === 'string') {
+      this.client.state.userId = UserID.toString();
+    }
+    if (typeof xMid === 'string') {
+      this.client.state.mid = xMid;
+    }
+    if (typeof Rur === 'string') {
+      this.client.state.rur = Rur;
+    }
+    if (typeof shbts === 'string') {
+      this.client.state.shbits = shbts;
+    }
+    if (typeof shbts === 'string') {
+      this.client.state.region = Region;
     }
   }
 
@@ -213,6 +235,24 @@ export class Request {
       Host: 'i.instagram.com',
       'Accept-Encoding': 'gzip',
       Connection: 'close',
+      'ig-intended-user-id': this.client.state.userId ? this.client.state.userId : 0,
+      'ig-u-ds-user-id': this.client.state.userId ? this.client.state.userId : undefined,
+      'ig-u-shbts': this.client.state.shbits ? this.client.state.shbits : undefined,
+      'ig-u-rur': this.client.state.rur ? this.client.state.rur : undefined,
+      'ig-u-ig-direct-region-hint': this.client.state.region ? this.client.state.region : undefined,
     };
+  }
+  public setHeaders(headers, username) {
+    //Username for generate device | uniq device
+    if (username) {
+      this.client.state.generateDevice(username);
+      this.client.state.authorization = headers.Authorization ? headers.Authorization : undefined;
+      this.client.state.userId = headers['ig-u-ds-user-id'] ? headers['ig-u-ds-user-id'] : undefined;
+      this.client.state.rur = headers['ig-u-rur'] ? headers['ig-u-rur'] : undefined;
+      this.client.state.mid = headers['X-MID'] ? headers['X-MID'] : undefined;
+      this.client.state.igWWWClaim = headers['X-IG-WWW-Claim'] ? headers['X-IG-WWW-Claim'] : undefined;
+      return true;
+    }
+    return false;
   }
 }

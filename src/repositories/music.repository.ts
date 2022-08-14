@@ -41,4 +41,17 @@ export class MusicRepository extends Repository {
     });
     return body;
   }
+
+  public async audioGlobalSearch(query:string){
+    const { body } = await this.client.request.send({
+      url: '/api/v1/music/audio_global_search/',
+      method: 'GET',
+      qs: {
+        _csrftoken: this.client.state.cookieCsrfToken,
+        query,
+        browse_session_id: this.client.state.clientSessionId,
+      },
+    });
+    return body;
+  }
 }
