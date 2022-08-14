@@ -165,12 +165,15 @@ export class State {
     try {
       return this.extractCookieValue('csrftoken');
     } catch {
-      State.stateDebug('csrftoken lookup failed, returning "missing".');
-      return 'missing';
+      State.stateDebug('csrftoken lookup failed, returning undefined.');
+      return;
     }
   }
 
   public get cookieUserId() {
+    if (this.userId) {
+      return this.userId
+    }
     return this.extractCookieValue('ds_user_id');
   }
 
